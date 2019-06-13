@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="default_box_color">#FFFFFF</color>
+    <color name="default_pin_color">#000000</color>
+
+    <color name="default_box_selected_color">#80000000</color>
+
+
+</resources>

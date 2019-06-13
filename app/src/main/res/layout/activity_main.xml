@@ -12,7 +12,8 @@
        android:layout_height="wrap_content"
        app:otp_box_default_color="@color/colorPrimaryDark"
        app:otp_text_color="@color/colorAccent"
-       app:otp_length="20"/>
+       app:otp_text_size="18sp"
+       app:otp_length="4"/>
 
 
 </RelativeLayout>

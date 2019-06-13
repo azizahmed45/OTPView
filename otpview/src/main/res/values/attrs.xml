@@ -4,6 +4,10 @@
         <attr name="otp_box_width" format="dimension" />
         <attr name="otp_box_height" format="dimension" />
 
+        <attr name="otp_box_horizontal_padding" format="dimension" />
+
+        <attr name="otp_box_gap" format="dimension" />
+
         <attr name="otp_box_default_color" format="color" />
         <attr name="otp_box_error_color" format="color" />
         <attr name="otp_box_accepted_color" format="color" />
