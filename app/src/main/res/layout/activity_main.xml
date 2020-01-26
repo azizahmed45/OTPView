@@ -7,11 +7,14 @@
     tools:context=".MainActivity">
 
    <com.mrgreenapps.otpview.OTPView
+       android:id="@+id/otpView"
        android:layout_centerInParent="true"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        app:otp_box_default_color="@color/colorPrimaryDark"
        app:otp_text_color="@color/colorAccent"
+       app:otp_box_width="80dp"
+       app:otp_box_gap="10dp"
        app:otp_text_size="18sp"
        app:otp_length="4"/>
 

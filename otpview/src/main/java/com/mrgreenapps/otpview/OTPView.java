@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,7 +26,6 @@ public class OTPView extends LinearLayout {
 
     Context context;
 
-
     int mOtpLength;
 
     ColorStateList mBoxDefaultColor;
@@ -42,19 +43,23 @@ public class OTPView extends LinearLayout {
 
     int mTextSize;
 
-
-    List<TextView> pinBoxList;
+    List<EditText> pinBoxList;
 
     EditText mInput;
-
 
     public OTPView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
 
-        TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.OTPView, 0, 0);
+        TypedArray typedArray = context.getTheme()
+                .obtainStyledAttributes(
+                        attrs,
+                        R.styleable.OTPView,
+                        0,
+                        0
+                );
 
-        try{
+        try {
             mOtpLength = typedArray.getInt(R.styleable.OTPView_otp_length, 4);
 
             mBoxDefaultColor = typedArray.getColorStateList(R.styleable.OTPView_otp_box_default_color);
@@ -76,21 +81,26 @@ public class OTPView extends LinearLayout {
             typedArray.recycle();
         }
 
-        pinBoxList = new ArrayList<>();
-        for(int i = 0; i < mOtpLength; i++){
+        drawBoxes();
+        addTextWatcherForIterate();
 
-            TextView pinBox = new TextView(context);
+    }
+
+    private void drawBoxes() {
+        pinBoxList = new ArrayList<>();
+        for (int i = 0; i < mOtpLength; i++) {
+
+            EditText pinBox = new EditText(context);
             pinBox.setText(String.valueOf(i));
 
+            pinBox.setMinimumWidth(mBoxWidth);
             pinBox.setTextSize(mTextSize);
 
-            if(mTextColor != null) pinBox.setTextColor(mTextColor.getDefaultColor());
+            if (mTextColor != null) pinBox.setTextColor(mTextColor.getDefaultColor());
 
             pinBox.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-            pinBox.setFilters(new InputFilter[] {new InputFilter.LengthFilter(1)});
-
-
+            pinBox.setFilters(new InputFilter[]{new InputFilter.LengthFilter(1)});
 
 
             LayoutParams p = new LayoutParams(mBoxWidth, mBoxHeight);
@@ -103,14 +113,46 @@ public class OTPView extends LinearLayout {
             pinBox.setPadding(mBoxHorizontalPadding, 0, mBoxHorizontalPadding, 0);
 
 
-            if(mBoxDefaultColor != null) pinBox.setBackgroundColor(mBoxDefaultColor.getDefaultColor());
+            if (mBoxDefaultColor != null) {
+                pinBox.setBackgroundColor(mBoxDefaultColor.getDefaultColor());
+            }
 
             pinBoxList.add(pinBox);
 
             addView(pinBox);
         }
+    }
 
+    private void addTextWatcherForIterate() {
+        for (int i = 0; i < pinBoxList.size() - 1; i++) {
+            final int nextPinBoxIndex = i + 1;
+            pinBoxList.get(i).addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (s.length() > 0) {
+                        pinBoxList.get(nextPinBoxIndex).requestFocus();
+                    }
+                }
+            });
+        }
+    }
+
+    public String getOTPPin(){
+        String OTPPin = "";
+        for(EditText pinbox: pinBoxList){
+            OTPPin += pinbox.getText().toString();
+        }
+        return OTPPin;
     }
 
 }
